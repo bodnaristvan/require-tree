@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<title>require dependency graph</title>
+		<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+		<!-- template for a single dependency leaf -->
+		<script type="text/template" id="simpleItem">
+			<li id="<%= id %>">
+				<% if (deps > 0) { %>
+				<span class="toggle open">▶</span>
+				<span class="toggle close">▼</span>
+				<% } %>
+				<span><%= name %></span>
+				<span class="info" data-id="<%= id %>">[info]</span>
+				<span class="openModule" data-name="<%= name %>">[open]</span>
+				<ul id="ul_<%= id %>"></ul>
+			</li>
+		</script>
+
+		<!-- template for an item that's already displayed somewhere -->
+		<script type="text/template" id="linkedItem">
+			<li id="<%= id %>" class="displayed">
+				<a href="#<%= id %>"><%= name %></a>
+				<span class="info" data-id="<%= id %>">[info]</span>
+				<span class="openModule" data-name="<%= name %>">[open]</span>
+			</li>
+		</script>
+
+		<!-- template for the info pane -->
+		<script type="text/template" id="infoPane">
+			<div class="infopane">
+				<a href="#" class="close">x</a>
+				<h3><%= name %></h3>
+				Dependencies (<%= deps.length %> total):
+				<ul>
+				<% _.each(deps, function(dep) { %>
+					<li><%= dep %></li>
+				<% }); %>
+				</ul>
+			</div>
+		</script>
+
+		<!-- template for history items -->
+		<script type="text/template" id="historyItem">
+			<li class="openModule" data-name="<%= moduleName %>"><%= moduleName %></li>
+		</script>
+
+		<script async type="text/javascript" src="javascripts/underscore-min.js"></script>
+		<script async type="text/javascript" src="javascripts/tree.js"></script>
+		<script async type="text/javascript" src="javascripts/display.js"></script>
+		<script async type="text/javascript" src="javascripts/init.js"></script>
+
+	</head>
+
+	<body onload="loadApp()">
+		<h1>Requirejs dependency graph</h1>
+
+		<!-- form to enter the starting point module name -->
+		<form id="moduleForm" class="loading">
+			Type in the requirejs module name to start from: <input type="text" name="moduleName" id="moduleName" value="module/Main" />
+			<input type="submit" value="Render" />
+		</form>
+
+		<!-- loading indicator elem -->
+		<div id="loading-indicator">Loading madge API...</div>
+
+		<br />
+
+		<!-- keep the history of previous modules in this session -->
+		<ul id="history"></ul>
+
+		<!-- placeholder for the wrapper renderer -->
+		<ul id="starter"></ul>
+	</body>
+</html>

@@ -1,0 +1,60 @@
+/* basic global UI effects */
+.hide {
+	display: none;
+}
+.loading {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.displayed a {
+	color: rgb(145, 60, 22);
+}
+li {
+	margin: 5px;
+	list-style-type: none;
+}
+.info {
+	display: inline-block;
+}
+.info:hover {
+	background-color: rgb(208, 67, 66);
+}
+.infopane {
+	position: absolute;
+	padding: 15px;
+	border: 2px solid black;
+	background-color: white;
+}
+.infopane .close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	color: red;
+	font-size: 1.5em;
+	padding: 3px;
+}
+
+.hide-children ul {
+	display: none;
+}
+.toggle {
+	font-size: 0.8em;
+}
+.hide-children .toggle.open {
+	display: inline-block;
+}
+.hide-children .toggle.close {
+	display: none;
+}
+.toggle.open {
+	display: none;
+}
+.toggle.close {
+	display: inline-block;
+}
+
+#history li {
+	display: inline;
+	color: rgb(145, 60, 22);
+}
