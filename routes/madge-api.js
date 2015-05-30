@@ -1,35 +1,49 @@
-var express = require('express');
-var router = express.Router();
-// madge api for processing requirejs dependencies
-var madge = require('madge');
-// project configuration
-var config = require('../config');
+var express = require('express'),
+	Promisejs = require('promise'),
 
+	// madge api for processing requirejs dependencies
+	madge = require('madge'),
 
-router.get('/', function(req, res, next) {
-	if (!config.madge.path || config.madge.path === '') {
-		res
-			.status(500)
-			.send({
-				error: 'No path set for dependency tree parsing in config.js'
-			});
-		return;
-	}
-	var dependencyObject = madge(config.madge.path, config.madge.options);
-	res.send(dependencyObject.tree);
+	// project configuration
+	config = require('../config'),
+	router = express.Router();
+
+function getDependencyTree() {
+	return new Promisejs(function (resolve, reject) {
+		if (!config.madge.path || config.madge.path === '') {
+			reject('No path set for dependency tree parsing in config.js');
+		}
+		var dependencyObject = madge(config.madge.path, config.madge.options);
+		resolve(dependencyObject);
+	});
+}
+
+router.get('/', function (req, res) {
+	getDependencyTree()
+		.then(function (dependencyObject) {
+			res.send(dependencyObject.tree);
+		})
+		.catch(function (errorMessage) {
+			res
+				.status(500)
+				.send({
+					error: errorMessage
+				});
+		});
 });
 
-router.get('/usedby', function(req, res, next) {
-	if (!config.madge.path || config.madge.path === '') {
-		res
-			.status(500)
-			.send({
-				error: 'No path set for dependency tree parsing in config.js'
-			});
-		return;
-	}
-	var dependencyObject = madge(config.madge.path, config.madge.options);
-	res.send(dependencyObject.depends(req.query.module));
+router.get('/usedby', function (req, res) {
+	getDependencyTree()
+		.then(function (dependencyObject) {
+			res.send(dependencyObject.depends(req.query.module));
+		})
+		.catch(function (errorMessage) {
+			res
+				.status(500)
+				.send({
+					error: errorMessage
+				});
+		});
 });
 
 module.exports = router;
