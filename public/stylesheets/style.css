@@ -30,12 +30,12 @@ body {
 	position: fixed;
 	top: 0;
 	padding: 5px 0px 0px 0px;
-
+	font-family: monospace;
 	background-color: #ddd;
 }
 
 .mainnav--form {
-	margin-bottom: 0.5em;
+	margin: 0em 0em 0.5em 1em;
 	border-bottom: 1px solid #dadada;
 }
 
