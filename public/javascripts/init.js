@@ -16,7 +16,7 @@ loadApp = function () {
 	});
 	document.querySelector('.refresh_tree').addEventListener('click', function (e) {
 		e.preventDefault();
-		document.getElementById('moduleForm').classList.add('loading');
+		document.getElementById('moduleForm').classList.remove('loading');
 		document.getElementById('loading-indicator').classList.remove('hide');
 
 		data = {};

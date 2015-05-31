@@ -1,3 +1,8 @@
+/* body */
+body {
+	margin: 0;
+}
+
 /* basic global UI effects */
 .hide {
 	display: none;
@@ -6,35 +11,106 @@
 	opacity: 0.5;
 	pointer-events: none;
 }
+.button {
+	border: 1px solid #ddd;
+	background-color: #eee;
+	display: inline-block;
+	padding: 0px 3px;
+	color: #555;
+}
+.button:hover {
+	background-color: #ddd;
+	color: #000;
+}
 
+
+/* navigation */
+.mainnav {
+	width: 100%;
+	position: fixed;
+	top: 0;
+	padding: 5px 0px 0px 0px;
+
+	background-color: #ddd;
+}
+
+.mainnav--form {
+	margin-bottom: 0.5em;
+	border-bottom: 1px solid #dadada;
+}
+
+/* history module */
+.history {
+	margin: 0;
+	padding: 0;
+	background-color: #eee;
+	border-bottom: 1px solid #aaa;
+}
+
+.history--item {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px 10px;
+	display: inline;
+	color: rgb(145, 60, 22);
+	border-right: 1px solid #aaa;
+}
+
+
+/*  tree rendering */
+.content {
+	margin-top: 4em;
+}
 .displayed a {
 	color: rgb(145, 60, 22);
 }
 li {
-	margin: 5px;
+	margin: 7px;
 	list-style-type: none;
 }
-.info {
-	display: inline-block;
+
+/* info panel */
+.infopane--overlay {
+	z-index: 1;
+	position: fixed;
+	overflow: scroll;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	opacity: 0.5;
+	background-color: #aaa;
 }
-.info:hover {
-	background-color: rgb(208, 67, 66);
-}
-.infopane {
-	position: absolute;
+.infopane--panel {
+	z-index: 2;
+	position: fixed;
+	width: 80vw;
+	top: 4em;
+	margin: 0px 10vw;
 	padding: 15px;
-	border: 2px solid black;
-	background-color: white;
+	background-color: #fafafa;
+	max-height: 85vh;
+	overflow: scroll;
+	box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.75);
+	border: 1px solid rgba(0, 0, 0, 0.75);
 }
-.infopane .close {
+.infopane--close {
 	position: absolute;
 	top: 0;
 	right: 0;
 	color: red;
 	font-size: 1.5em;
 	padding: 3px;
+	text-decoration: none;
 }
-.infopane li {
+.infopane--heading {
+	margin: 0px 0px 15px 0px
+}
+.infopane--half {
+	width: 50%;
+	float: left;
+}
+.infopane--list li {
 	list-style-type: decimal;
 }
 
@@ -55,9 +131,4 @@ li {
 }
 .toggle.close {
 	display: inline-block;
-}
-
-#history li {
-	display: inline;
-	color: rgb(145, 60, 22);
 }

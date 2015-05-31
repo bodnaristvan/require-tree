@@ -1,18 +1,20 @@
-/* global document, _, Tree */
-var linkedTemplate = _.template(document.getElementById('linkedItem').innerText);
-var simpleTemplate = _.template(document.getElementById('simpleItem').innerText);
-var infopaneTemplate = _.template(document.getElementById('infoPane').innerText);
-var historyitemTemplate = _.template(document.getElementById('historyItem').innerText);
+/* global document, _, Tree, XMLHttpRequest */
+var linkedTemplate = _.template(document.getElementById('linkedItem').innerText),
+	simpleTemplate = _.template(document.getElementById('simpleItem').innerText),
+	infopaneTemplate = _.template(document.getElementById('infoPane').innerText),
+	historyitemTemplate = _.template(document.getElementById('historyItem').innerText),
+	Renderer;
 
-var Renderer = function () {
+
+Renderer = function () {
 	'use strict';
 
-	var $starter = document.getElementById('starter');
-	var $history = document.getElementById('history');
-	var treeBuilder = null;
+	var $starter = document.querySelector('.starter'),
+		$history = document.querySelector('.history'),
+		treeBuilder = null,
 
-	var keepHistory = false;
-	var historyStack = [];
+		keepHistory = false,
+		historyStack = [];
 
 	function onItemClick(e) {
 		if (e.target.classList.contains('info')) {
@@ -40,30 +42,36 @@ var Renderer = function () {
 				deps: _.chain(deps).unique().without(mod.name).sortBy().value()
 			}),
 			httpRequest = new XMLHttpRequest(),
-			$p;
+			infopaneOverlay = document.querySelector('.infopane--overlay'),
+			infopanePanel = document.querySelector('.infopane--panel');
 
-		e.target.innerHTML += infopane;
-		$p = e.target.querySelector('.infopane');
+		infopanePanel.innerHTML = infopane;
+		infopaneOverlay.classList.remove('hide');
+		infopanePanel.classList.remove('hide');
 
-		$p.addEventListener('click', function (ce) {
+		infopanePanel.addEventListener('click', function (ce) {
 			ce.preventDefault();
-			e.target.removeChild($p);
+			infopanePanel.innerHTML = '';
+			infopaneOverlay.classList.add('hide');
+			infopanePanel.classList.add('hide');
 		});
 
 		// load items that depend on this module
 		httpRequest.onreadystatechange = function () {
+			var errorMsg,
+				errorJson,
+				data,
+				html;
 			if (httpRequest.readyState === 4) {
 				if (httpRequest.status === 200) {
-					var data = JSON.parse(httpRequest.responseText);
-					var html = data.map(function (module) {
+					data = JSON.parse(httpRequest.responseText);
+					html = data.map(function (module) {
 						return '<li>' + module + '</li>';
 					}).join('');
-					$p.querySelector('.items_using_list').innerHTML = html;
-					$p.querySelector('.items_using_count').innerHTML = ' (' + data.length + ' total)';
-					$p.querySelector('.items_using_panel').classList.remove('loading');
+					infopanePanel.querySelector('.items_using_list').innerHTML = html;
+					infopanePanel.querySelector('.items_using_count').innerHTML = ' (' + data.length + ' total)';
+					infopanePanel.querySelector('.items_using_panel').classList.remove('loading');
 				} else {
-					var errorMsg,
-						errorJson;
 					try {
 						errorJson = JSON.parse(httpRequest.responseText);
 						errorMsg = 'Error loading madge API: ' + errorJson.error;
@@ -79,9 +87,9 @@ var Renderer = function () {
 	}
 
 	function renderTree(module) {
-		var displayedNodes = [];
+		var displayedNodes = [],
 
-		var drawNode = function (mod, el) {
+			drawNode = function (mod, el) {
 				var childPlaceholder;
 
 				if (displayedNodes.indexOf(mod.name) !== -1) {
